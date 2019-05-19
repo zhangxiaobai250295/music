@@ -1,6 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Recommend from './views/recommend';
+import PlayListView from './views/playListView';
+import Rank from './views/rank';
+import Artists from './views/artists';
+import PlayListInfo from './views/playListInfo';
+import RankInfo from './views/rankInfo';
+import ArtistsInfo from './views/artistsInfo';
 
 Vue.use(Router);
 
@@ -9,7 +16,50 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: '/recommend',
+          name: 'recommend',
+          component: Recommend
+        },
+        {
+          path: '/playListView',
+          name: 'playListView',
+          component: PlayListView,
+          children: [
+            {
+              path: ':id',
+              name: 'playListInfo',
+              component: PlayListInfo
+            }
+          ]
+        },
+        {
+          path: '/rank',
+          name: 'rank',
+          component: Rank,
+          children: [
+            {
+              path: ':id',
+              name: 'rankInfo',
+              component: RankInfo
+            }
+          ]
+        },
+        {
+          path: '/artists',
+          name: 'artists',
+          component: Artists,
+          children: [
+            {
+              path: ':id',
+              name: 'artistsInfo',
+              component: ArtistsInfo
+            }
+          ]
+        }
+      ]
     }
     // {
     //   path: '/about',

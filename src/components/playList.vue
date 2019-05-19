@@ -2,7 +2,7 @@
     <div>
         <ul class="play-list">
           <li v-for="(item,index) in data" :key="index" @click="handleClick(item)">
-            <img :src="item.picUrl" alt="">
+            <img v-lazy="`${item.picUrl}?param=400y400`" alt="">
             <p>{{item.name}}</p>
             <i class="iconfont icon-zanting"></i>
           </li>
@@ -23,7 +23,7 @@
     },
     methods: {
       handleClick(val) {
-        this.$emit('click', val);
+        this.$emit('clickItem', val);
       }
     }
   };

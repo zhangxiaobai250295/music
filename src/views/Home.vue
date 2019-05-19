@@ -13,19 +13,19 @@
         <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
       <ul class="nav">
-        <li>
+        <li @click="goToRecommend">
           <div class="icon-container">
             <i class="iconfont icon-date icon"></i>
           </div>
           <p>每日推荐</p>
         </li>
-        <li>
+        <li @click="goToPlayList">
           <div class="icon-container">
             <i class="iconfont icon-music-list icon"></i>
           </div>
           <p>歌单</p>
         </li>
-        <li>
+        <li @click="goToRank">
           <div class="icon-container">
             <i class="iconfont icon-rank icon"></i>
           </div>
@@ -38,41 +38,39 @@
         <div class="title">
           每日推荐
         </div>
-        <div class="more">
+        <div class="more" @click="goToPlayList">
           <i class="iconfont icon-more"></i>
         </div>
       </div>
-      <playList :data="playListData"></playList>
+      <div class="play-list-wrapper">
+        <playList :data="playListData" @clickItem="goToPlayListInfo"></playList>
+      </div>
     </div>
     <div class="home-item">
       <div class="title-wrapper">
         <div class="title">
           热门歌手
         </div>
-        <div class="more">
+        <div class="more" @click="goToArtists">
           <i class="iconfont icon-more"></i>
         </div>
       </div>
-      <ul class="artists-list">
-        <li v-for="(item,index) in artistsData" :key="index">
-          <img :src="item.picUrl" alt="">
-          <div>
-            <p class="name">{{item.name}}</p>
-            <p class="info">专辑{{item.albumSize}}张，共{{item.musicSize}}首歌</p>
-          </div>
-        </li>
-      </ul>
+      <ArtistList @clickItem="goToArtistsInfo" :data="artistsData"></ArtistList>
     </div>
+    <transition name="slide">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
   import playList from '../components/playList';
+  import ArtistList from '../components/artistList';
   export default {
     name: 'home',
     components: {
-      playList
+      playList, ArtistList
     },
     data() {
       return {
@@ -107,6 +105,42 @@
         if (data.code === 200) {
           this.artistsData = data.artists;
         }
+      },
+      goToRecommend() {
+        this.$router.push({
+          name: 'recommend'
+        });
+      },
+      goToPlayList() {
+        this.$router.push({
+          name: 'playListView'
+        });
+      },
+      goToRank() {
+        this.$router.push({
+          name: 'rank'
+        });
+      },
+      goToArtists() {
+        this.$router.push({
+          name: 'artists'
+        });
+      },
+      goToPlayListInfo(item) {
+        this.$router.push({
+          name: 'playListInfo',
+          params: {
+            id: item.id
+          }
+        });
+      },
+      goToArtistsInfo(item) {
+        this.$router.push({
+          name: 'artistsInfo',
+          params: {
+            id: item.id
+          }
+        });
       }
     },
     created() {
@@ -117,7 +151,7 @@
   };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .header{
     position: fixed;
     top: 0;
@@ -204,30 +238,7 @@
       color: #fff;
     }
   }
-  .artists-list{
-    li{
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding: 30px;
-      border-top: 1PX solid #e6e6e6;
-      margin-left: -20px;
-      margin-right: -20px;
-
-      img{
-        width: 80px;
-        height: 80px;
-        margin-right: 20px;
-      }
-      .name{
-        font-size: 30px;
-        color: #000;
-        margin-bottom: 20px;
-      }
-      .info{
-        font-size: 24px;
-        color: #b2b2b2;
-      }
-    }
+  .play-list-wrapper{
+    min-height: 645px;
   }
 </style>
