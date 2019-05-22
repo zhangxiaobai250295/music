@@ -29,7 +29,6 @@
     },
     methods: {
       handleClick(item, index) {
-        console.log(111);
         this.$emit('clickItem', item, index);
       }
     }

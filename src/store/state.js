@@ -5,6 +5,7 @@ const state = {
   fullScreen: false,
   // 播放列表
   playList: [],
+  // 列表的备份
   sequencesList: [],
   // 当前播放
   currentIndex: 0,

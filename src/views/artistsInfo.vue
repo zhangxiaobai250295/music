@@ -32,7 +32,6 @@
         this.formatData = formatSongDetail(data.hotSongs);
       },
       addToPlay(item, index) {
-        console.log(111);
         // mini播放器或者全屏播放器
         this.SET_FULLSCREEN(true);
         // 播放列表

@@ -19,10 +19,18 @@
     methods: {
       initScroll() {
         if (!this.$refs.scrollWrapper) return;
-        this.scroll = new BScroll(this.$refs.scrollWrapper);
+        this.scroll = new BScroll(this.$refs.scrollWrapper, {
+          click: true
+        });
       },
       refresh() {
         this.scroll && this.scroll.refresh();
+      },
+      scrollToElement() {
+        this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments);
+      },
+      scrollTo() {
+        this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments);
       }
     },
     mounted() {
