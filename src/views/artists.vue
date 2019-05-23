@@ -1,9 +1,12 @@
 <template>
   <div class="page">
-    <div>
+    <div v-if="artistsData.length">
       <mHeader>全部歌手</mHeader>
-      <ArtistList @clickItem="goToArtistsInfo" :data="artistsData" class="artist"></ArtistList>
+      <Scroll :data="artistsData" class="page-view-list">
+        <ArtistList @clickItem="goToArtistsInfo" :data="artistsData" class="artist"></ArtistList>
+      </Scroll>
     </div>
+    <Loading v-else></Loading>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -14,10 +17,12 @@
   import axios from 'axios';
   import mHeader from '../components/mHeader';
   import ArtistList from '../components/artistList';
+  import Scroll from '../components/scroll';
+  import Loading from '../components/loading';
   export default {
     name: 'artists',
     components: {
-      mHeader, ArtistList
+      mHeader, ArtistList, Scroll, Loading
     },
     data() {
       return {

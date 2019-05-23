@@ -10,7 +10,13 @@ const state = {
   // 当前播放
   currentIndex: 0,
   // 播放方式
-  mode: playMode.sequence
+  mode: playMode.sequence,
+  // 历史播放记录
+  historyList: JSON.parse(localStorage.getItem('HistoryList')) || [],
+  // 喜欢列表
+  loveList: JSON.parse(localStorage.getItem('LoveList')) || [],
+  // 搜索列表
+  searchText: JSON.parse(localStorage.getItem('SearchText')) || []
 };
 
 export default state;

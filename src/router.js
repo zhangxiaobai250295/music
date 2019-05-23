@@ -8,6 +8,11 @@ import Artists from './views/artists';
 import PlayListInfo from './views/playListInfo';
 import RankInfo from './views/rankInfo';
 import ArtistsInfo from './views/artistsInfo';
+import Search from './views/search';
+import UserCenter from './views/userCenter';
+import UserHistoryList from './views/userHistoryList';
+import UserLoveList from './views/userLoveList';
+import UserPlayList from './views/userPlayList';
 
 Vue.use(Router);
 
@@ -56,6 +61,33 @@ export default new Router({
               path: ':id',
               name: 'artistsInfo',
               component: ArtistsInfo
+            }
+          ]
+        },
+        {
+          path: '/search',
+          name: 'search',
+          component: Search
+        },
+        {
+          path: '/userCenter',
+          name: 'userCenter',
+          component: UserCenter,
+          children: [
+            {
+              path: '/userHistoryList',
+              name: 'userHistoryList',
+              component: UserHistoryList
+            },
+            {
+              path: '/userLoveList',
+              name: 'userLoveList',
+              component: UserLoveList
+            },
+            {
+              path: '/userPlayList',
+              name: 'userPlayList',
+              component: UserPlayList
             }
           ]
         }

@@ -6,7 +6,7 @@
       :count="formatData.length"
     ></Top>
     <Scroll class="page-info-list" :data="formatData">
-      <SongList :data="formatData"></SongList>
+      <SongList :data="formatData" @clickItem="addToPlay"></SongList>
     </Scroll>
   </div>
 </template>
@@ -15,9 +15,10 @@
   import axios from 'axios';
   import infoMixin from '../common/js/infoMixin';
   import { formatSongDetail } from '@/common/js/util';
+  import PlayMixin from '../common/js/playMixin';
   export default {
     name: 'rankInfo',
-    mixins: [infoMixin],
+    mixins: [infoMixin, PlayMixin],
     methods: {
       async getInfo(id) {
         const { data } = await axios.get(`/api/playlist/detail?id=${id}`);

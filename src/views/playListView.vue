@@ -1,11 +1,14 @@
 <template>
   <div class="page">
-    <div>
+    <div v-if="playListData.length">
       <mHeader>全部歌单</mHeader>
-      <div class="play-wrapper">
-        <PlayList :data="playListData" @clickItem="goToPlayListInfo"></PlayList>
-      </div>
+      <Scroll :data="playListData" class="page-view-list">
+        <div class="play-wrapper">
+          <PlayList :data="playListData" @clickItem="goToPlayListInfo"></PlayList>
+        </div>
+      </Scroll>
     </div>
+    <Loading v-else></Loading>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -16,11 +19,13 @@
   import axios from 'axios';
   import mHeader from '../components/mHeader';
   import PlayList from '../components/playList';
+  import Scroll from '../components/scroll';
+  import Loading from '../components/loading';
 
   export default {
     name: 'playListView',
     components: {
-      mHeader, PlayList
+      mHeader, PlayList, Scroll, Loading
     },
     data() {
       return {

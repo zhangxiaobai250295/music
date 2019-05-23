@@ -1,62 +1,66 @@
 <template>
   <div>
     <div class="header">
-      <div class="personal">我的</div>
+      <div class="personal" @click="goToUserCenter">我的</div>
       <div>MIKO</div>
-      <i class="iconfont icon-chaxun"></i>
+      <i class="iconfont icon-chaxun" @click="goToSearch"></i>
     </div>
-    <div class="swiper-content home-item">
-      <swiper :options="swiperOption">
-        <swiper-slide v-for="(item,index) in newSongData" :key="index">
-          <img :src="`${item.song.album.blurPicUrl}?param=400y400`" alt="">
-        </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
-      <ul class="nav">
-        <li @click="goToRecommend">
-          <div class="icon-container">
-            <i class="iconfont icon-date icon"></i>
-          </div>
-          <p>每日推荐</p>
-        </li>
-        <li @click="goToPlayList">
-          <div class="icon-container">
-            <i class="iconfont icon-music-list icon"></i>
-          </div>
-          <p>歌单</p>
-        </li>
-        <li @click="goToRank">
-          <div class="icon-container">
-            <i class="iconfont icon-rank icon"></i>
-          </div>
-          <p>排行版</p>
-        </li>
-      </ul>
-    </div>
-    <div class="home-item">
-      <div class="title-wrapper">
-        <div class="title">
-          每日推荐
+    <Scroll :data="artistsData" class="home-container">
+      <div>
+        <div class="swiper-content home-item">
+          <swiper :options="swiperOption">
+            <swiper-slide v-for="(item,index) in newSongData" :key="index">
+              <img :src="`${item.song.album.blurPicUrl}?param=400y400`" alt="">
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
+          <ul class="nav">
+            <li @click="goToRecommend">
+              <div class="icon-container">
+                <i class="iconfont icon-date icon"></i>
+              </div>
+              <p>每日推荐</p>
+            </li>
+            <li @click="goToPlayList">
+              <div class="icon-container">
+                <i class="iconfont icon-music-list icon"></i>
+              </div>
+              <p>歌单</p>
+            </li>
+            <li @click="goToRank">
+              <div class="icon-container">
+                <i class="iconfont icon-rank icon"></i>
+              </div>
+              <p>排行版</p>
+            </li>
+          </ul>
         </div>
-        <div class="more" @click="goToPlayList">
-          <i class="iconfont icon-more"></i>
+        <div class="home-item">
+          <div class="title-wrapper">
+            <div class="title">
+              每日推荐
+            </div>
+            <div class="more" @click="goToPlayList">
+              <i class="iconfont icon-more"></i>
+            </div>
+          </div>
+          <div class="play-list-wrapper">
+            <playList :data="playListData" @clickItem="goToPlayListInfo"></playList>
+          </div>
+        </div>
+        <div class="home-item">
+          <div class="title-wrapper">
+            <div class="title">
+              热门歌手
+            </div>
+            <div class="more" @click="goToArtists">
+              <i class="iconfont icon-more"></i>
+            </div>
+          </div>
+          <ArtistList @clickItem="goToArtistsInfo" :data="artistsData"></ArtistList>
         </div>
       </div>
-      <div class="play-list-wrapper">
-        <playList :data="playListData" @clickItem="goToPlayListInfo"></playList>
-      </div>
-    </div>
-    <div class="home-item">
-      <div class="title-wrapper">
-        <div class="title">
-          热门歌手
-        </div>
-        <div class="more" @click="goToArtists">
-          <i class="iconfont icon-more"></i>
-        </div>
-      </div>
-      <ArtistList @clickItem="goToArtistsInfo" :data="artistsData"></ArtistList>
-    </div>
+    </Scroll>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -67,10 +71,11 @@
   import axios from 'axios';
   import playList from '../components/playList';
   import ArtistList from '../components/artistList';
+  import Scroll from '../components/scroll';
   export default {
     name: 'home',
     components: {
-      playList, ArtistList
+      playList, ArtistList, Scroll
     },
     data() {
       return {
@@ -141,6 +146,16 @@
             id: item.id
           }
         });
+      },
+      goToSearch() {
+        this.$router.push({
+          name: 'search'
+        });
+      },
+      goToUserCenter() {
+        this.$router.push({
+          name: 'userCenter'
+        });
       }
     },
     created() {
@@ -205,7 +220,7 @@
   }
   .swiper-content{
     .swiper-container{
-      margin-top: 90px;
+      /*margin-top: 90px;*/
       width: 100%;
       height: 350px;
       border-radius: 10px;
@@ -237,8 +252,16 @@
       font-size: 70px;
       color: #fff;
     }
+    p{
+      font-size: 24px;
+    }
   }
   .play-list-wrapper{
     min-height: 645px;
+  }
+  .home-container{
+    height: calc(100vh - 200px);
+    overflow: hidden;
+    margin-top: 90px;
   }
 </style>

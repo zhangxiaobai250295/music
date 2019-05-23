@@ -15,7 +15,8 @@ Vue.config.productionTip = false;
 Vue.use(VueAwesomeSwiper, /* { default global options } */);
 
 Vue.use(VueLazyLoad, {
-  loading: '/load.gif'
+  loading: '/load.gif',
+  error: '/user-bg.png'
 });
 
 new Vue({

@@ -4,14 +4,16 @@
       <mHeader :red="false">{{title}}</mHeader>
       <img :src="`${img}?param=400y400`" alt="">
     </div>
-    <div class="count">
-      共有{{count}}首歌曲
-    </div>
+    <!--<div class="count">-->
+      <!--共有{{count}}首歌曲-->
+    <!--</div>-->
+    <Count>{{count}}</Count>
   </div>
 </template>
 
 <script>
   import mHeader from './mHeader';
+  import Count from './count';
   export default {
     props: {
       title: {
@@ -29,7 +31,7 @@
     },
     name: 'top',
     components: {
-      mHeader
+      mHeader, Count
     }
   };
 </script>
@@ -70,11 +72,11 @@
     z-index: 1;
   }
 }
-.count{
-  height: 80px;
-  line-height: 80px;
-  font-size: 26px;
-  color: #808080;
-  padding-left: 30px;
-}
+/*.count{*/
+  /*height: 80px;*/
+  /*line-height: 80px;*/
+  /*font-size: 26px;*/
+  /*color: #808080;*/
+  /*padding-left: 30px;*/
+/*}*/
 </style>

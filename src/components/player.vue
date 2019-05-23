@@ -2,7 +2,7 @@
   <div>
     <div v-show="!fullScreen" class="mini-player">
       <div class="player-info" @click="toogleShow(true)">
-        <div class="player-img">
+        <div class="player-img rotate" :class="rotateStop">
           <img :src="songImg" alt="">
         </div>
         <div>
@@ -32,8 +32,8 @@
         </div>
         <swiper :options="swiperOption">
           <swiper-slide class="img-container">
-            <img :src="songImg" alt="">
-            <i class="iconfont icon-xiai"></i>
+            <img :src="songImg" alt="" class="rotate" :class="rotateStop">
+            <i class="iconfont icon-xiai" :class="{'icon-xiai-red': isLove}" @click="addToLove"></i>
           </swiper-slide>
           <swiper-slide class="lyric-container">
             <Scroll ref="lyricScroll" class="lyric-scroll">
@@ -73,9 +73,9 @@
     <transition name="playlist">
       <Scroll class="playlist-scroll" v-if="playlistShow">
         <ul>
-          <li v-for="(item,index) in playList" :key="index">
+          <li v-for="(item,index) in playList" :key="index" @click="addToPlay(index)">
             <p>{{item.name}} - <span class="artists-name" v-for="(arItem,arIndex) in item.ar" :key="arIndex">{{arItem.name}}</span></p>
-            <i class="iconfont icon-shanchu2"></i>
+            <i class="iconfont icon-shanchu2" @click.stop="delFromPlayList(item)"></i>
           </li>
         </ul>
         <div class="close" @click="togglePlaylistshow">关闭</div>
@@ -126,7 +126,8 @@
         'sequencesList',
         'currentIndex',
         'currentSong',
-        'mode'
+        'mode',
+        'isLove'
       ]),
       songName() {
         return this.currentSong ? this.currentSong.name : '暂无播放歌曲';
@@ -135,7 +136,7 @@
         return this.currentSong ? this.currentSong.ar : [];
       },
       songImg() {
-        return this.currentSong ? `${this.currentSong.al.picUrl}?param=400y400` : '';
+        return this.currentSong && this.currentSong.al.picUrl ? `${this.currentSong.al.picUrl}?param=400y400` : require('../assets/image/user-bg.png');
       },
       playIcon() {
         return this.playing ? 'icon-bofang' : 'icon-zanting';
@@ -151,6 +152,9 @@
         // toFixed 四舍五入
         p = Number(p * 100).toFixed();
         return `${p}%`;
+      },
+      rotateStop() {
+        return this.playing ? '' : 'rotate-stop';
       }
     },
     methods: {
@@ -158,7 +162,11 @@
         'SET_FULLSCREEN',
         'SET_CURRENT_INDEX',
         'SET_MODE',
-        'SET_PLAY_LIST'
+        'SET_PLAY_LIST',
+        'DEL_FROM_PLAY_LIST',
+        'SET_HISTORY_LIST',
+        'SET_LOVE_LIST',
+        'DEL_FROM_LOVE_LIST'
       ]),
       toogleShow(val) {
         this.SET_FULLSCREEN(val);
@@ -171,6 +179,7 @@
           this.musicData = data.data[0];
           this.$nextTick(() => {
             this.togglePlay(true);
+            this.SET_HISTORY_LIST(this.currentSong);
           });
         }
       },
@@ -349,6 +358,23 @@
       },
       togglePlaylistshow() {
         this.playlistShow = !this.playlistShow;
+      },
+      addToPlay(index) {
+        this.SET_CURRENT_INDEX(index);
+        this.togglePlaylistshow();
+      },
+      delFromPlayList(item) {
+        this.DEL_FROM_PLAY_LIST({
+          'delSong': item,
+          'curSong': this.currentSong
+        });
+      },
+      addToLove() {
+        if (this.isLove) {
+          this.DEL_FROM_LOVE_LIST(this.currentSong);
+        } else {
+          this.SET_LOVE_LIST(this.currentSong);
+        }
       }
     },
     watch: {
@@ -674,5 +700,20 @@
 }
 .playlist-enter,.playlist-leave-to{
   transform: translate3d(0,100%,0);
+}
+@keyframes rotate {
+  // 播放器图片的旋转动画
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+}
+.rotate{
+  animation: rotate 30s linear infinite;
+}
+.rotate-stop{
+  animation-play-state: paused;
 }
 </style>

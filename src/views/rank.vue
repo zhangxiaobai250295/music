@@ -1,36 +1,39 @@
 <template>
   <div class="page">
-    <div>
+    <div v-if="officeList.length">
       <mHeader>排行榜</mHeader>
-      <div class="rank-wrapper">
-        <div>
-          <p class="rank-title">官方榜</p>
-          <ul class="office-list">
-            <li class="list-item" v-for="(item,index) in officeList" :key="index" @click="goToRankInfo(item.id)">
-              <img v-lazy="`${item.coverImgUrl}?param=400y400`" alt="">
-              <div>
-                <ul>
-                  <li class="list-text" v-for="(listItem,listIndex) in item.tracks" :key="listIndex">
-                    {{listIndex+1}}.{{listItem.first}}-{{listItem.second}}
-                  </li>
-                </ul>
+      <Scroll :data="officeList" class="page-view-list">
+        <div class="rank-wrapper">
+          <div>
+            <p class="rank-title">官方榜</p>
+            <ul class="office-list">
+              <li class="list-item" v-for="(item,index) in officeList" :key="index" @click="goToRankInfo(item.id)">
+                <img v-lazy="`${item.coverImgUrl}?param=400y400`" alt="">
+                <div>
+                  <ul>
+                    <li class="list-text" v-for="(listItem,listIndex) in item.tracks" :key="listIndex">
+                      {{listIndex+1}}.{{listItem.first}}-{{listItem.second}}
+                    </li>
+                  </ul>
+                  <i class="iconfont icon-zanting"></i>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p class="rank-title">推荐榜</p>
+            <ul class="rank-list">
+              <li v-for="(item,index) in recommendList" :key="index">
+                <img v-lazy="`${item.coverImgUrl}?param=400y400`" alt="">
+                <p>{{item.name}}</p>
                 <i class="iconfont icon-zanting"></i>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <p class="rank-title">推荐榜</p>
-          <ul class="rank-list">
-            <li v-for="(item,index) in recommendList" :key="index">
-              <img v-lazy="`${item.coverImgUrl}?param=400y400`" alt="">
-              <p>{{item.name}}</p>
-              <i class="iconfont icon-zanting"></i>
-            </li>
-          </ul>
-        </div>
-      </div>
+      </Scroll>
     </div>
+    <Loading v-else></Loading>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -40,10 +43,12 @@
 <script>
   import axios from 'axios';
   import mHeader from '../components/mHeader';
+  import Scroll from '../components/scroll';
+  import Loading from '../components/loading';
   export default {
     name: 'rank',
     components: {
-      mHeader
+      mHeader, Scroll, Loading
     },
     data() {
       return {
